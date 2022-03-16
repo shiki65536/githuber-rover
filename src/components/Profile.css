@@ -1,0 +1,25 @@
+.profile {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    place-content: center;
+}
+@media screen and (min-width: 960px) {
+    .profile {grid-template-columns: 1fr 1fr;}
+}
+.rover {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    place-content: center;
+}
+.profile span {
+    color: var(--primary-7);
+    font-size: 1.5rem;
+    padding-right: 0.5rem;
+    vertical-align: -0.1rem;    
+}
+.profile h3 {
+    color: var(--grey-3);
+    display: inline-block;
+}

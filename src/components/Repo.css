@@ -1,0 +1,9 @@
+.repo {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    place-content: center;
+}
+@media screen and (min-width: 960px) {
+    .repo {grid-template-columns: 1fr 1fr;}
+}

@@ -1,0 +1,20 @@
+.chart {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+.chart-container {
+    height: 400px;
+    display: grid;
+    align-items:center;
+}
+.chart span {
+    color: var(--primary-7);
+    font-size: 1.5rem;
+    padding-right: 0.5rem;
+    vertical-align: -0.1rem;    
+}
+.chart h3 {
+    color: var(--grey-3);
+    display: inline-block;
+}

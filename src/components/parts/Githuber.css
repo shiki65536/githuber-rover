@@ -1,0 +1,28 @@
+.githuber {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+}
+.githuber-list{
+    display: flex;
+    padding: 0.25rem;
+    color: var(--primary-2);
+    align-items: center;
+    gap: 0.25rem;
+}
+.scroll-githuber {
+    height: 150px;
+    overflow: scroll;
+}
+.githuber .avatar {
+    width: 30px;
+}
+.githuber  h4 {
+    color: var(--primary-2);
+    font-size: 1rem;
+    font-weight: 100;
+    text-transform: none;
+}
+a {
+    cursor: pointer;
+}

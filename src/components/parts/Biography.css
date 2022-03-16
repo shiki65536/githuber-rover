@@ -1,0 +1,33 @@
+.biography {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+}
+.bio-header {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 1rem;
+    position: relative;
+}
+.bio-header h3 {
+    margin-top: 0.75rem;
+    margin-bottom: 0;
+    display: inline-block;
+}
+.follow-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.bio {
+    margin: 0.5rem 0;  
+    letter-spacing: (--spacing);
+}
+.appendix {
+    color: var(--grey-4);
+}
+.appendix span{
+    color: var(--primary-6);
+    vertical-align:middle;
+    font-size: 1rem;
+}

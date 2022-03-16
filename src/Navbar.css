@@ -1,0 +1,44 @@
+.navbar {
+  background: var(--primary-5);
+  color: var(--white);
+  padding: 0.5rem 0.5rem 0.1rem;
+  display: grid;
+  margin-bottom: 0.5rem;
+}
+.nav-header {
+  display: grid;
+  grid-template-columns: auto auto;
+  margin-bottom: 0.5rem;
+  align-items: center;
+}
+.nav-header h2 {
+  padding: 0.15rem 0.5rem;
+  font-weight: 100;
+  font-size: 1.5rem;
+  margin-bottom: 0;
+  display: inline;
+}
+.logo {
+  font-size: 1.5rem;
+}
+.error-message {
+  background: var(--red-light);
+  border-radius: var(--radius);
+  /* border: 2px solid var(--primary-8); */
+  color: var(--white);
+  max-height: 40px;
+  padding: 0.25rem;
+  transition: var(--transition);
+  text-align: center;
+  text-transform: uppercase;
+}
+.arrow {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid var(--red-light);
+  position: relative;
+  top: 0;
+  left: 5rem;
+}
