@@ -2,6 +2,7 @@
     background: var(--white);
     border-radius: var(--radius);
     padding: 1.25rem;
+    display: grid;
 }
 .githuber-list{
     display: flex;
@@ -11,13 +12,17 @@
     gap: 0.25rem;
 }
 .scroll-githuber {
-    height: 150px;
-    overflow: scroll;
+    min-height: 150px;
+    max-height: 180px;
+    overflow: auto;
 }
 .githuber .avatar {
     width: 30px;
 }
-.githuber  h4 {
+.githuber h3 {
+    font-size: 1.5rem;
+}
+.githuber h4 {
     color: var(--primary-2);
     font-size: 1rem;
     font-weight: 100;

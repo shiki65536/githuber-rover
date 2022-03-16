@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
-    place-content: center;
+    place-content: strech;
 }
 @media screen and (min-width: 960px) {
     .profile {grid-template-columns: 1fr 1fr;}
@@ -12,6 +12,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
     place-content: center;
+    grid-template-rows: 1fr;
 }
 .profile span {
     color: var(--primary-7);
