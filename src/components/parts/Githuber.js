@@ -1,14 +1,14 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import './Githuber.css';
 import { GoOrganization, GoPerson } from "react-icons/go";
 import { GithubContext } from '../../context/GithubContext';
 
 function Githuber({ githubersFile, follower }) {
-  const { fetchGihubUser, setSearchUser } = useContext(GithubContext);
+  const { fetchGihubUser, dispatch } = useContext(GithubContext);
 
   const handleClick = (login) => {
     fetchGihubUser(login);
-    setSearchUser(login);
+    dispatch({type:'SEARCH_USER', payload: login})
   }
 
   return (
@@ -22,9 +22,9 @@ function Githuber({ githubersFile, follower }) {
           return (
             <div key={idx} className="githuber-list">
               <div className="avatar">
-                <img src={avatar_url} alt={login} />
+                <img src={avatar_url} alt={login} onClick={()=>{handleClick(login)}}/>
               </div>
-              <h4><a onClick={()=>{handleClick(login)}}>@{login}</a></h4>
+              <h4><button onClick={()=>{handleClick(login)}}>@{login}</button></h4>
             </div>)
         })}
        </div>

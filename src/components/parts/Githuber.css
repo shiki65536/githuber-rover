@@ -18,6 +18,7 @@
 }
 .githuber .avatar {
     width: 30px;
+    cursor: pointer;
 }
 .githuber h3 {
     font-size: 1.5rem;
@@ -28,6 +29,11 @@
     font-weight: 100;
     text-transform: none;
 }
-a {
+.githuber button {
+    border: 0;
+    background: transparent;
     cursor: pointer;
+    font-weight: 100;
+    font-size: 1rem;
+    color: var(--grey-4);
 }

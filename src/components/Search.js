@@ -4,13 +4,13 @@ import React, { useContext } from 'react';
 import { GithubContext } from '../context/GithubContext';
 
 function Search() {
-    const { fetchGihubUser, requests, searchUser, setSearchUser } = useContext(GithubContext);
+    const { fetchGihubUser, requests, searchUser, dispatch } = useContext(GithubContext);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-            fetchGihubUser(searchUser);
+        fetchGihubUser(searchUser);
     }
-    
+
     return (
         <section className="section">
             <div className="section-center">
@@ -20,14 +20,14 @@ function Search() {
                         <GoMarkGithub />
                         <input
                             type="text"
-                            onChange={(e) => { setSearchUser(e.target.value) }}
+                            onChange={(e) => { dispatch({ type: 'SEARCH_USER', payload: e.target.value }) }}
                             value={searchUser}
                         />
                         <button
                             className="btn"
                         >Search</button>
                         <div className="limit">
-                            <p>{Math.floor(requests/4)} / 15</p>
+                            <p>{Math.floor(requests / 4)} / 15</p>
                         </div>
                     </form>
 
