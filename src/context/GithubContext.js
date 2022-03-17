@@ -1,4 +1,4 @@
-import { createContext, useRef, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 
@@ -16,8 +16,12 @@ const GithubProvider = ({ children }) => {
     const [searchUser, setSearchUser] = useState('github');
     const [errMsg, setErrMsg] = useState('');
     const [showMsg, setShowMsg] = useState(false);
+    const [language, setLanguage] = useState({});
+    const [stars, setStars] = useState([]);
+    const [forks, setForks] = useState([]);
+    const [starLang, setStarLang] = useState({});
 
-    const fetchGihubUser = async (searchUser) => {
+    const fetchGihubUser = useCallback(async (searchUser) => {
         const res = await axios(`${URL}/users/${searchUser}`)
             .catch(err => console.log(err));
 
@@ -40,18 +44,14 @@ const GithubProvider = ({ children }) => {
             if (resFollowings) {
                 setFollowingsFile(resFollowings.data.reverse())
             }
-        } else if (requests === 0) {
-            setErrMsg('reached access limit');
-            setShowMsg(true);
-            setTimeout(()=>{setShowMsg(false)},3500)
         } else {
             setErrMsg('No such user.');
             setShowMsg(true);
-            setTimeout(()=>{setShowMsg(false)},3500);
+            setTimeout(() => { setShowMsg(false) }, 3500);
         }
 
         setIsLoading(false);
-    }
+    }, []);
 
 
     const checkLimit = async () => {
@@ -59,21 +59,58 @@ const GithubProvider = ({ children }) => {
             .catch(err => console.log(err));
         if (res) {
             setRequests(res.data.rate.remaining);
-            if(res.data.rate.remaining === 0) {
+            if (res.data.rate.remaining === 0) {
                 setErrMsg('reached access limit');
                 setShowMsg(true);
-                setTimeout(()=>{setShowMsg(false)},3500)
+                setTimeout(() => { setShowMsg(false) }, 3500)
             }
         } else {
-           setErrMsg('server error');
-           setShowMsg(true);
-           setTimeout(()=>{setShowMsg(false)},3500)
+            setErrMsg('server error');
+            setShowMsg(true);
+            setTimeout(() => { setShowMsg(false) }, 3500)
         }
     }
+
+    const analyzeRepo = useCallback(() => {
+        setLanguage(repos.map(repo => repo.language)
+          .filter(lang => typeof lang === 'string')
+          .reduce((allLang, lang) => {
+            if (lang in allLang) { allLang[lang] += 1 }
+            else { allLang[lang] = 1 }
+            return allLang
+          }, {}));
+    
+          setStarLang(repos.map(repo=> {
+            let {language, stargazers_count} = repo;
+            return {language, stargazers_count}
+          }).filter(t => typeof t.language === 'string' )
+          .reduce((total, count)=>{
+            let {language, stargazers_count} = count;
+            if( language in total) {total[language] += stargazers_count}
+            else {total[language] = stargazers_count}
+            return total;
+          },{}));   
+    
+        setStars(repos.sort(function (a, b) {
+          return b.stargazers_count - a.stargazers_count
+        }).slice(0, 10).filter(repo=>repo.stargazers_count !== 0));
+    
+        setForks(repos.sort(function (a, b) {
+          return b.forks_count - a.forks_count
+        }).slice(0, 10).filter(repo=>repo.forks_count !== 0));
+      }, [repos])
 
     useEffect(() => {
         checkLimit();
     }, [repos, followersFile, followingsFile, githubUser])
+
+    useEffect(() => {
+        fetchGihubUser('github');
+    }, [fetchGihubUser])
+
+    useEffect(() => {
+        analyzeRepo();
+      }, [analyzeRepo])
 
     return <GithubContext.Provider value={{
         githubUser,
@@ -85,6 +122,10 @@ const GithubProvider = ({ children }) => {
         searchUser,
         errMsg,
         showMsg,
+        language,
+        starLang,
+        stars,
+        forks,
         setSearchUser,
         fetchGihubUser,
     }}>

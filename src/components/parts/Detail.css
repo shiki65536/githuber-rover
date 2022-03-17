@@ -10,6 +10,9 @@
     color: var(--primary-1);
     margin-bottom: 0;
 }
+@media screen and (min-width: 996px){
+    .detail h3{ font-size: 1.5rem;} 
+}
 .detail p {
     margin-top: 1.25rem;
     padding-right: 1.25rem;

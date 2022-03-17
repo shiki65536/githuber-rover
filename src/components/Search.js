@@ -1,21 +1,16 @@
 import './Search.css';
 import { GoMarkGithub } from "react-icons/go";
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { GithubContext } from '../context/GithubContext';
 
 function Search() {
-
     const { fetchGihubUser, requests, searchUser, setSearchUser } = useContext(GithubContext);
 
     const handleSubmit = (e) => {
         e.preventDefault();
             fetchGihubUser(searchUser);
     }
-
-    useEffect(() => {
-        fetchGihubUser(searchUser);
-    }, [])
-
+    
     return (
         <section className="section">
             <div className="section-center">

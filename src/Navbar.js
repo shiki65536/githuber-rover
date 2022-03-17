@@ -5,6 +5,7 @@ import { GithubContext } from './context/GithubContext';
 
 function Navbar() {
   const {errMsg, showMsg } = useContext(GithubContext);
+
   return (
     <div className='navbar'>
       <div className="section-center">
