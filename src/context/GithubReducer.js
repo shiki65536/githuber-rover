@@ -10,14 +10,13 @@ const GithubReducer = (state, action) => {
         case 'SEARCH_USER':
             return {
                 ...state,
-                isLoading: false,
+                isLoading: true,
                 searchUser: action.payload,
             };
         case 'GET_GITHUBER':
             return {
                 ...state,
                 githubUser: action.payload,
-                isLoading: false,
             };
         case 'GET_REPOS':
             return {
