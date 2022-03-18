@@ -26,6 +26,7 @@ function Doughnut({ data, type }) {
                 let dataArr = context.chart.data.datasets[0].data;
                 dataArr.map(data => {
                     sum += Number(data);
+                    return sum;
                 });
 
                 let percentage = (value * 100 / sum).toFixed(2) + '%';
@@ -57,7 +58,7 @@ function Doughnut({ data, type }) {
         });
 
         return () => { myChart.destroy(); }
-    }, [data])
+    }, [data, type])
 
 
     return (

@@ -134,6 +134,12 @@ p {
     line-height: 1;
   }
 }
+button:disabled,
+button[disabled]:hover{
+  border: transparent;
+  background-color: var(--grey-8);
+  color: var(--grey-10);
+}
 /*  global classes */
 
 .btn {

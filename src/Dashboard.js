@@ -8,18 +8,18 @@ import Footer from './Footer';
 import Error from './Error';
 
 function Dashboard() {
-  const { isLoading, requests } = useContext(GithubContext);
+  const { isLoading, requests, isError, errMsg } = useContext(GithubContext);
 
   return (
     <div>
       {isLoading ? <Loading /> :
-        <>{requests !== 0 ?
+        <>{requests !== 0 && !isError ?
           <>
             <Info />
             <Profile />
             <Repo /><Footer />
           </>
-          : <Error message='you have reached the limit. Please try later.'/>}
+          : <Error message={errMsg}/>}
         </>}
     </div>
   )

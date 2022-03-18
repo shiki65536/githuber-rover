@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, useCallback, useReducer } from 'react';
+import { createContext, useEffect, useCallback, useReducer } from 'react';
 import axios from 'axios';
 import GithubReducer from './GithubReducer';
 
@@ -8,6 +8,7 @@ const GithubContext = createContext();
 const GithubProvider = ({ children }) => {
     const initialState = {
         searchUser: 'github',
+        showSearch: 'github',
         githubUser: [],
         followersFile: [],
         followingsFile: [],
@@ -15,20 +16,41 @@ const GithubProvider = ({ children }) => {
         starLang: {},
         stars: [],
         forks: [],
-        isLoading: true,
         requests: 60,
-        // errMsg: '',
-        // showMsg
+        isLoading: true,
+        isError: false,
+        errMsg: '',
+        showMsgBox: false
     };
 
     const [state, dispatch] = useReducer(GithubReducer, initialState);
 
-    const [errMsg, setErrMsg] = useState('');
-    const [showMsg, setShowMsg] = useState(false);
-
     const fetchGihubUser = useCallback(async (searchUser) => {
+
+        setIsLoading();
         const res = await axios(`${URL}/users/${searchUser}`)
-            .catch(err => console.log(err));
+            .catch(err => {
+                if (err.response.status === 404) {
+
+                    dispatch({
+                        type: 'NO_USER_ERROR',
+                        payload: 'No Such User',
+                    })
+                    setTimeout(()=> {dispatch({type:'CANCEL_BOX', payload: false})},3000)
+                } else if(err.response.status === 403) {
+                    dispatch({
+                        type: 'REACH_LIMIT_ERROR',
+                        payload: 'reached github access limit',
+                    })
+                    setTimeout(()=> {dispatch({type:'CANCEL_BOX', payload: false})},3000)
+                } else {
+                    dispatch({
+                        type: 'FETCH_ERROR',
+                        payload: 'errors in fetching data',
+                    })
+                    setTimeout(()=> {dispatch({type:'CANCEL_BOX', payload: false})},3000)
+                }
+            })
 
         if (res) {
             dispatch({
@@ -61,13 +83,8 @@ const GithubProvider = ({ children }) => {
                     payload: resFollowings.data.reverse(),
                 })
             }
-        } else {
-            setErrMsg('No such user.');
-            setShowMsg(true);
-            setTimeout(() => { setShowMsg(false) }, 3500);
-        }
+        } 
     }, []);
-
 
     const checkLimit = async () => {
         const res = await axios(`${URL}/rate_limit`)
@@ -79,40 +96,35 @@ const GithubProvider = ({ children }) => {
             })
 
             if (res.data.rate.remaining === 0) {
-                setErrMsg('reached access limit');
-                setShowMsg(true);
-                setTimeout(() => { setShowMsg(false) }, 3500)
+                dispatch({
+                    type: 'REACH_LIMIT_ERROR',
+                    payload: 'reached github access limit',
+                })
+                setTimeout(()=> {dispatch({type:'CANCEL_BOX', payload: false})},3000)
             }
         } else {
-            setErrMsg('server error');
-            setShowMsg(true);
-            setTimeout(() => { setShowMsg(false) }, 3500)
+            dispatch({
+                type: 'SERVER_ERROR',
+                payload: 'errors in checking server limit.',
+            })
+            setTimeout(()=> {dispatch({type:'CANCEL_BOX', payload: false})},3000)
         }
+    }
+
+    const setIsLoading = () => {
+        dispatch({ type: 'LOADING' });
     }
 
     useEffect(() => {
         checkLimit();
-
-}, [state.followersFile, state.followingsFile, state.githubUser])
+    }, [state.followersFile])
 
     useEffect(() => {
         fetchGihubUser('github');
     }, [fetchGihubUser])
 
-
     return <GithubContext.Provider value={{
-        githubUser: state.githubUser,
-        searchUser: state.searchUser,
-        followersFile: state.followersFile,
-        followingsFile: state.followingsFile,
-        language: state.language,
-        starLang: state.starLang,
-        stars: state.stars,
-        forks: state.forks,
-        isLoading: state.isLoading,
-        requests: state.requests,
-        errMsg,
-        showMsg,
+        ...state,
         fetchGihubUser,
         dispatch,
     }}>

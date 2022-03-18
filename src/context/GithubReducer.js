@@ -5,12 +5,21 @@ const GithubReducer = (state, action) => {
         case 'LOADING':
             return {
                 ...state,
+                isError: false,
                 isLoading: true,
+            };
+        case 'CHANGE_SEARCH':
+            return {
+                ...state,
+                isLoading: false,
+                showSearch: action.payload,
             };
         case 'SEARCH_USER':
             return {
                 ...state,
                 isLoading: true,
+                isError: false,
+                showSearch: action.payload,
                 searchUser: action.payload,
             };
         case 'GET_GITHUBER':
@@ -66,7 +75,44 @@ const GithubReducer = (state, action) => {
                 ...state,
                 isLoading: false,
                 requests: action.payload,
-            }
+            };
+        case 'CANCEL_BOX':
+            return {
+                ...state,
+                showMsgBox: action.payload,
+            };
+        case 'NO_USER_ERROR':
+            return {
+                ...state,
+                isLoading: false,
+                isError: true,
+                errMsg: action.payload,
+                showMsgBox: true
+            };
+        case 'REACH_LIMIT_ERROR':
+            return {
+                ...state,
+                isLoading: false,
+                isError: true,
+                errMsg: action.payload,
+                showMsgBox: true
+            };
+        case 'FETCH_ERROR':
+            return {
+                ...state,
+                isLoading: false,
+                isError: true,
+                errMsg: action.payload,
+                showMsgBox: true
+            };
+        case 'SERVER_ERROR':
+            return {
+                ...state,
+                isLoading: false,
+                isError: true,
+                errMsg: action.payload,
+                showMsgBox: true
+            };
     }
 }
 
