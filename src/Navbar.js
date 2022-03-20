@@ -5,6 +5,7 @@ import { GithubContext } from './context/GithubContext';
 
 function Navbar() {
   const {errMsg, showMsgBox, fetchGihubUser, dispatch } = useContext(GithubContext);
+
   const handleClick = () => {
     fetchGihubUser('github');
     dispatch({ type: 'SEARCH_USER', payload: 'github' })

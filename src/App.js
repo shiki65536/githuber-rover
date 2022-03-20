@@ -5,16 +5,15 @@ import Search from './components/Search';
 
 function App() {
   return (
-    <GithubProvider>
-    <div className="App">
-      <nav>
-        <Navbar />
-      </nav>
-      <Search />
-      <Dashboard />
-    </div>
-    </GithubProvider>
-
+      <GithubProvider>
+        <div className="App">
+          <nav>
+            <Navbar />
+          </nav>
+          <Search />
+          <Dashboard />
+        </div>
+      </GithubProvider>
   );
 }
 

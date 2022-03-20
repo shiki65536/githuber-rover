@@ -10,6 +10,7 @@ import Error from './Error';
 function Dashboard() {
   const { isLoading, requests, isError, errMsg } = useContext(GithubContext);
 
+
   return (
     <div>
       {isLoading ? <Loading /> :

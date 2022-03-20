@@ -28,6 +28,7 @@ const GithubProvider = ({ children }) => {
     const fetchGihubUser = useCallback(async (searchUser) => {
 
         setIsLoading();
+
         const res = await axios(`${URL}/users/${searchUser}`)
             .catch(err => {
                 if (err.response.status === 404) {
@@ -36,19 +37,19 @@ const GithubProvider = ({ children }) => {
                         type: 'NO_USER_ERROR',
                         payload: 'No Such User',
                     })
-                    setTimeout(()=> {dispatch({type:'CANCEL_BOX', payload: false})},3000)
-                } else if(err.response.status === 403) {
+                    setTimeout(() => { dispatch({ type: 'CANCEL_BOX', payload: false }) }, 3000)
+                } else if (err.response.status === 403) {
                     dispatch({
                         type: 'REACH_LIMIT_ERROR',
                         payload: 'reached github access limit',
                     })
-                    setTimeout(()=> {dispatch({type:'CANCEL_BOX', payload: false})},3000)
+                    setTimeout(() => { dispatch({ type: 'CANCEL_BOX', payload: false }) }, 3000)
                 } else {
                     dispatch({
                         type: 'FETCH_ERROR',
                         payload: 'errors in fetching data',
                     })
-                    setTimeout(()=> {dispatch({type:'CANCEL_BOX', payload: false})},3000)
+                    setTimeout(() => { dispatch({ type: 'CANCEL_BOX', payload: false }) }, 3000)
                 }
             })
 
@@ -58,32 +59,42 @@ const GithubProvider = ({ children }) => {
                 payload: res.data,
             })
 
-            const resRepos = await axios(`${URL}/users/${searchUser}/repos?per_page=100`).catch(err => console.log(err));
-            const resFollowers = await axios(`${URL}/users/${searchUser}/followers?per_page=100`).catch(err => console.log(err));
-            const resFollowings = await axios(`${URL}/users/${searchUser}/following?per_page=100`).catch(err => console.log(err));
+            const urlOne = `${URL}/users/${searchUser}/repos?per_page=100`;
+            const urlTwo = `${URL}/users/${searchUser}/followers?per_page=100`;
+            const urlThree = `${URL}/users/${searchUser}/following?per_page=100`;
 
-            if (resRepos) {
-                dispatch({
-                    type: 'GET_REPOS',
-                    payload: resRepos.data.map((r) => {
-                        const { name, language, stargazers_count, forks_count } = r;
-                        return { name, language, stargazers_count, forks_count }
-                    }),
+            await axios
+                .all([axios.get(urlOne), axios.get(urlTwo), axios.get(urlThree)])
+                .then((axios.spread((...res) => {
+                    const resRepos = res[0];
+                    const resFollowers = res[1];
+                    const resFollowings = res[2];
+
+                    if (resRepos) {
+                        dispatch({
+                            type: 'GET_REPOS',
+                            payload: resRepos.data.map((r) => {
+                                const { name, language, stargazers_count, forks_count } = r;
+                                return { name, language, stargazers_count, forks_count }
+                            }),
+                        })
+                    }
+                    if (resFollowers) {
+                        dispatch({
+                            type: 'GET_FOLLOWERS',
+                            payload: resFollowers.data.reverse(),
+                        })
+                    }
+                    if (resFollowings) {
+                        dispatch({
+                            type: 'GET_FOLLOWINGS',
+                            payload: resFollowings.data.reverse(),
+                        })
+                    }
+                }))).catch(errors => {
+                    console.error(errors);
                 })
-            }
-            if (resFollowers) {
-                dispatch({
-                    type: 'GET_FOLLOWERS',
-                    payload: resFollowers.data.reverse(),
-                })
-            }
-            if (resFollowings) {
-                dispatch({
-                    type: 'GET_FOLLOWINGS',
-                    payload: resFollowings.data.reverse(),
-                })
-            }
-        } 
+        }
     }, []);
 
     const checkLimit = async () => {
@@ -100,14 +111,14 @@ const GithubProvider = ({ children }) => {
                     type: 'REACH_LIMIT_ERROR',
                     payload: 'reached github access limit',
                 })
-                setTimeout(()=> {dispatch({type:'CANCEL_BOX', payload: false})},3000)
+                setTimeout(() => { dispatch({ type: 'CANCEL_BOX', payload: false }) }, 3000)
             }
         } else {
             dispatch({
                 type: 'SERVER_ERROR',
                 payload: 'errors in checking server limit.',
             })
-            setTimeout(()=> {dispatch({type:'CANCEL_BOX', payload: false})},3000)
+            setTimeout(() => { dispatch({ type: 'CANCEL_BOX', payload: false }) }, 3000)
         }
     }
 
