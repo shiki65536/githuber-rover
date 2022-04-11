@@ -1,4 +1,4 @@
-# Githuber Rover
+# 📊 Githuber Rover
 
 *Let's discover gihubers!*\
 Just use the seach bar or click on the accounts in followers or followings.
